@@ -1,0 +1,84 @@
+using System;
+using System.Text.Json.Serialization;
+using OmbrevixBilling.Core.Enum;
+
+namespace OmbrevixBilling.Models.Enums;
+
+[JsonConverter(typeof(StringEnumConverter<SubscriptionSort>))]
+public sealed record SubscriptionSort : OpenStringEnum<SubscriptionSort>
+{
+    private SubscriptionSort(string value) : base(value)
+    {
+    }
+
+    public static readonly SubscriptionSort SignupDate = new("signup_date");
+
+    public static readonly SubscriptionSort PeriodStart = new("period_start");
+
+    public static readonly SubscriptionSort PeriodEnd = new("period_end");
+
+    public static readonly SubscriptionSort NextEvaluation = new("next_evaluation");
+
+    public static readonly SubscriptionSort UpdatedAt = new("updated_at");
+
+    public static readonly SubscriptionSort CreatedAt = new("created_at");
+
+    public static readonly SubscriptionSort TotalPayments = new("total_payments");
+
+    public static readonly SubscriptionSort Id = new("id");
+
+    public static readonly SubscriptionSort OpenBalance = new("open_balance");
+
+    public static readonly SubscriptionSort ExpiresAt = new("expires_at");
+
+    public TResult Match<TResult>(Func<TResult> onSignupDate,
+        Func<TResult> onPeriodStart,
+        Func<TResult> onPeriodEnd,
+        Func<TResult> onNextEvaluation,
+        Func<TResult> onUpdatedAt,
+        Func<TResult> onCreatedAt,
+        Func<TResult> onTotalPayments,
+        Func<TResult> onId,
+        Func<TResult> onOpenBalance,
+        Func<TResult> onExpiresAt,
+        Func<string, TResult> otherwise) =>
+        this switch
+        {
+            _ when this == SignupDate => onSignupDate(),
+            _ when this == PeriodStart => onPeriodStart(),
+            _ when this == PeriodEnd => onPeriodEnd(),
+            _ when this == NextEvaluation => onNextEvaluation(),
+            _ when this == UpdatedAt => onUpdatedAt(),
+            _ when this == CreatedAt => onCreatedAt(),
+            _ when this == TotalPayments => onTotalPayments(),
+            _ when this == Id => onId(),
+            _ when this == OpenBalance => onOpenBalance(),
+            _ when this == ExpiresAt => onExpiresAt(),
+            _ => otherwise(Value)
+        };
+
+    public void Match(Action onSignupDate,
+        Action onPeriodStart,
+        Action onPeriodEnd,
+        Action onNextEvaluation,
+        Action onUpdatedAt,
+        Action onCreatedAt,
+        Action onTotalPayments,
+        Action onId,
+        Action onOpenBalance,
+        Action onExpiresAt,
+        Action<string> otherwise)
+    {
+        if (this == SignupDate) onSignupDate();
+        else if (this == PeriodStart) onPeriodStart();
+        else if (this == PeriodEnd) onPeriodEnd();
+        else if (this == NextEvaluation) onNextEvaluation();
+        else if (this == UpdatedAt) onUpdatedAt();
+        else if (this == CreatedAt) onCreatedAt();
+        else if (this == TotalPayments) onTotalPayments();
+        else if (this == Id) onId();
+        else if (this == OpenBalance) onOpenBalance();
+        else if (this == ExpiresAt) onExpiresAt();
+        else otherwise(Value);
+    }
+}

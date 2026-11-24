@@ -1,0 +1,15 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using OmbrevixBilling.Core.Models;
+
+namespace OmbrevixBilling.Models;
+
+public record CouponVariants
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("codes")]
+    public IReadOnlyList<string>? Codes { get; init; }
+
+    [JsonExtensionData]
+    public AdditionalProperties AdditionalProperties { get; init; } = [];
+}
